@@ -70,7 +70,7 @@ function ProjectDetail() {
           <div className="glass rounded-2xl p-6">
             <h3 className="text-sm font-semibold uppercase tracking-widest text-cyan">Tech stack</h3>
             <div className="mt-4 flex flex-wrap gap-2">
-              {project.tech.map((t) => (
+              {project.tech.map((t: string) => (
                 <span key={t} className="rounded-full glass px-3 py-1 text-xs">{t}</span>
               ))}
             </div>
