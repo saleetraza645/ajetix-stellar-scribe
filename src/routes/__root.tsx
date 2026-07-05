@@ -11,6 +11,16 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import "@fontsource/space-grotesk/400.css";
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/space-grotesk/700.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import { LenisProvider } from "../components/lenis-provider";
+import { SiteNav } from "../components/site-nav";
+import { SiteFooter } from "../components/site-footer";
 
 function NotFoundComponent() {
   return (
@@ -77,21 +87,50 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Ajetix — AI, Software & Product Studio" },
+      {
+        name: "description",
+        content:
+          "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East.",
+      },
+      { name: "author", content: "Ajetix" },
+      { name: "theme-color", content: "#0B1120" },
+      { property: "og:site_name", content: "Ajetix" },
+      { property: "og:title", content: "Ajetix — AI, Software & Product Studio" },
+      {
+        property: "og:description",
+        content: "AI, software, SaaS, mobile, cloud and design — built by a global team.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@Ajetix_1126" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Ajetix",
+          url: "https://ajetix.com",
+          logo: "https://ajetix.com/favicon.png",
+          email: "info@ajetix.com",
+          sameAs: [
+            "https://www.instagram.com/ajetix_as/",
+            "https://www.facebook.com/share/1DAJEzWjpH/",
+            "https://youtube.com/@ajetix",
+            "https://x.com/Ajetix_1126",
+          ],
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -119,8 +158,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <LenisProvider>
+        <div className="relative min-h-screen">
+          <SiteNav />
+          <main className="pt-24">
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+      </LenisProvider>
     </QueryClientProvider>
   );
 }
