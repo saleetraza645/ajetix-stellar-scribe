@@ -104,6 +104,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Ajetix_1126" },
+      { name: "twitter:title", content: "Ajetix — AI, Software & Product Studio" },
+      { name: "description", content: "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East." },
+      { property: "og:description", content: "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East." },
+      { name: "twitter:description", content: "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/86b4ea90-510d-499a-a4ff-5bc42c76ecf5/id-preview-f0aee6b4--c08df396-a80d-4e41-ae6d-5cb5aa462bab.lovable.app-1783273373365.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/86b4ea90-510d-499a-a4ff-5bc42c76ecf5/id-preview-f0aee6b4--c08df396-a80d-4e41-ae6d-5cb5aa462bab.lovable.app-1783273373365.png" },
     ],
     links: [
       {
