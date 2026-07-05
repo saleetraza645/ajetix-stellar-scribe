@@ -22,15 +22,7 @@ function Home() {
         <Hero3D />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color-background)_75%)]" />
         <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col items-center justify-center px-6 pt-32 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground"
-          >
-            <Sparkles size={12} className="text-cyan" />
-            AI · Software · Product · Since 2019
-          </motion.div>
+          {/* The tagline pill was removed as per request */}
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
