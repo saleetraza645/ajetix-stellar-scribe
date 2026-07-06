@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { services, techStack } from "@/lib/services-data";
+import { TechStackPills } from "@/components/tech-stack-pills";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -76,10 +77,8 @@ function Services() {
       <div className="mt-24 glass-strong rounded-3xl p-10 md:p-16">
         <span className="text-xs uppercase tracking-widest text-cyan">Tech we use</span>
         <h2 className="mt-3 text-3xl md:text-4xl font-semibold">A modern, pragmatic stack.</h2>
-        <div className="mt-8 flex flex-wrap gap-2">
-          {techStack.map((t) => (
-            <span key={t} className="rounded-full glass px-4 py-2 text-sm">{t}</span>
-          ))}
+        <div className="mt-8">
+          <TechStackPills items={techStack} />
         </div>
       </div>
 

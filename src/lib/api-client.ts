@@ -1,8 +1,20 @@
 // Thin fetch wrapper for the standalone Express API.
-// If VITE_API_BASE_URL is unset, functions throw a distinct error so
-// callers can fall back to local data (used before the API is deployed).
+// If VITE_API_BASE_URL is unset (or localhost on production), callers fall back
+// to local data / Supabase contact (used before the API is deployed).
 
-const RAW_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+function resolveApiBase(): string {
+  const raw = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+  if (!raw) return "";
+  // Ignore localhost API URL on deployed sites — it can't be reached from the browser.
+  if (typeof window !== "undefined") {
+    const onLocalhost =
+      window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (!onLocalhost && /localhost|127\.0\.0\.1/.test(raw)) return "";
+  }
+  return raw;
+}
+
+const RAW_BASE = resolveApiBase();
 
 export const API_ENABLED = Boolean(RAW_BASE);
 

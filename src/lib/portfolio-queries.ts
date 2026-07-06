@@ -17,6 +17,17 @@ export function apiProjectToProject(p: ApiProject): Project {
   };
 }
 
+async function fetchProjectsList(): Promise<Project[]> {
+  if (!API_ENABLED) return localProjects;
+  try {
+    const { projects } = await api.listProjects();
+    const mapped = projects.map(apiProjectToProject);
+    return mapped.length > 0 ? mapped : localProjects;
+  } catch {
+    return localProjects;
+  }
+}
+
 export async function fetchProject(slug: string): Promise<Project | undefined> {
   if (!API_ENABLED) return getLocalProject(slug);
   try {
@@ -30,30 +41,24 @@ export async function fetchProject(slug: string): Promise<Project | undefined> {
 export function usePortfolioProjects() {
   return useQuery({
     queryKey: ["portfolio", "list"],
-    queryFn: async () => {
-      if (!API_ENABLED) return localProjects;
-      const { projects } = await api.listProjects();
-      return projects.map(apiProjectToProject);
-    },
+    queryFn: fetchProjectsList,
+    placeholderData: localProjects,
     staleTime: 60_000,
-    retry: 2,
-    enabled: true,
+    retry: 1,
   });
 }
 
 export function usePortfolioProject(slug: string) {
+  const local = getLocalProject(slug);
   return useQuery({
     queryKey: ["portfolio", "detail", slug],
     queryFn: async () => {
-      if (!API_ENABLED) {
-        const p = getLocalProject(slug);
-        if (!p) throw new Error("Not found");
-        return p;
-      }
-      const { project } = await api.getProject(slug);
-      return apiProjectToProject(project);
+      const p = await fetchProject(slug);
+      if (!p) throw new Error("Not found");
+      return p;
     },
+    placeholderData: local,
     staleTime: 60_000,
-    retry: 2,
+    retry: 1,
   });
 }

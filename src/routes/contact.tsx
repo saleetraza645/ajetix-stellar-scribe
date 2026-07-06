@@ -4,6 +4,8 @@ import { useDropzone } from "react-dropzone";
 import { motion } from "framer-motion";
 import { z } from "zod";
 import { Upload, X, Mail, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import imageCompression from "browser-image-compression";
+import { supabase } from "@/integrations/supabase/client";
 import { api, API_ENABLED, ApiError } from "@/lib/api-client";
 
 export const Route = createFileRoute("/contact")({
@@ -90,30 +92,67 @@ function Contact() {
     setErrors({});
     setStatus("submitting");
 
-    if (!API_ENABLED) {
-      setStatus("error");
-      setErrorMsg("Contact API is not configured. Set VITE_API_BASE_URL in your environment.");
-      return;
-    }
+    const budgetValue = budget === "Custom" ? (customBudget.trim() || "Custom") : budget;
 
     try {
-      const budgetValue = budget === "Custom" ? (customBudget.trim() || "Custom") : budget;
+      if (API_ENABLED) {
+        await api.submitContact({
+          name: parsed.data.name,
+          email: parsed.data.email,
+          budget: budgetValue,
+          projectDetails: parsed.data.projectDetails,
+          website: parsed.data.website,
+          files,
+        });
+      } else {
+        // Lovable / Supabase fallback (works on deployed site without Express API)
+        const fileUrls: { name: string; path: string; size: number }[] = [];
+        const submissionId = crypto.randomUUID();
 
-      await api.submitContact({
-        name: parsed.data.name,
-        email: parsed.data.email,
-        budget: budgetValue,
-        projectDetails: parsed.data.projectDetails,
-        website: parsed.data.website,
-        files,
-      });
+        for (const file of files) {
+          let toUpload: File = file;
+          if (file.type.startsWith("image/")) {
+            try {
+              toUpload = await imageCompression(file, {
+                maxSizeMB: 1.5,
+                maxWidthOrHeight: 2400,
+                useWebWorker: true,
+              });
+            } catch { /* fallback to original */ }
+          }
+          const path = `submissions/${submissionId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
+          const { error: upErr } = await supabase.storage
+            .from("contact-attachments")
+            .upload(path, toUpload, { contentType: file.type, upsert: false });
+          if (upErr) throw upErr;
+          fileUrls.push({ name: file.name, path, size: toUpload.size });
+        }
+
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: parsed.data.name,
+            email: parsed.data.email,
+            budget: budgetValue,
+            projectDetails: parsed.data.projectDetails,
+            fileUrls,
+            website: parsed.data.website,
+          }),
+        });
+
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t || "Submission failed");
+        }
+      }
 
       setStatus("success");
       setName(""); setEmail(""); setProjectDetails(""); setFiles([]); setCustomBudget("");
     } catch (err) {
       console.error(err);
       setStatus("error");
-      setErrorMsg(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
+      setErrorMsg(err instanceof ApiError ? err.message : err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   }
 

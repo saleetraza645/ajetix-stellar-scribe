@@ -1,9 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { API_ENABLED } from "@/lib/api-client";
 import { fetchProject, usePortfolioProject, usePortfolioProjects } from "@/lib/portfolio-queries";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ProjectCover } from "@/components/project-cover";
 
 export const Route = createFileRoute("/portfolio/$slug")({
   loader: async ({ params }) => {
@@ -34,34 +33,8 @@ export const Route = createFileRoute("/portfolio/$slug")({
 function ProjectDetail() {
   const { slug } = Route.useParams();
   const loaderData = Route.useLoaderData();
-  const { data: project = loaderData.project, isLoading, isError, refetch } = usePortfolioProject(slug);
+  const { data: project = loaderData.project } = usePortfolioProject(slug);
   const { data: allProjects = [] } = usePortfolioProjects();
-
-  if (API_ENABLED && isLoading && !project) {
-    return (
-      <article className="mx-auto max-w-5xl px-5 sm:px-6 py-16 sm:py-20">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="mt-8 h-12 w-2/3" />
-        <Skeleton className="mt-6 h-6 w-full max-w-3xl" />
-        <Skeleton className="mt-12 aspect-[16/9] rounded-3xl" />
-      </article>
-    );
-  }
-
-  if (API_ENABLED && isError) {
-    return (
-      <article className="mx-auto max-w-5xl px-5 sm:px-6 py-16 sm:py-20 text-center">
-        <p className="text-sm text-muted-foreground">Could not load this project.</p>
-        <button
-          type="button"
-          onClick={() => refetch()}
-          className="mt-4 rounded-full glass px-5 py-2 text-xs hover:bg-white/10 transition"
-        >
-          Retry
-        </button>
-      </article>
-    );
-  }
 
   const idx = allProjects.findIndex((p) => p.slug === project.slug);
   const list = allProjects.length ? allProjects : [project];
@@ -92,17 +65,7 @@ function ProjectDetail() {
         layoutId={`project-cover-${project.slug}`}
         className="mt-12 aspect-[16/9] rounded-3xl shadow-glow-violet relative overflow-hidden"
       >
-        {project.coverImage && (
-          <img
-            src={project.coverImage}
-            alt={`${project.title} cover`}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-        <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient}${project.coverImage ? " opacity-75" : ""}`} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_60%)]" />
+        <ProjectCover project={project} className="absolute inset-0 rounded-3xl" />
       </motion.div>
 
       <div className="mt-12 sm:mt-16 grid md:grid-cols-3 gap-8 md:gap-10">

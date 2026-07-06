@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Hero3D } from "@/components/hero-3d";
+import { ProjectCover } from "@/components/project-cover";
+import { TechStackPills } from "@/components/tech-stack-pills";
 import { services, techStack } from "@/lib/services-data";
 import { projects } from "@/lib/portfolio-data";
 
@@ -134,16 +136,7 @@ function Home() {
                 stack we deploy every day.
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {techStack.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full glass px-3 sm:px-4 py-1.5 sm:py-2 text-xs text-foreground/80"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
+            <TechStackPills items={techStack} />
           </div>
         </motion.div>
       </section>
@@ -175,10 +168,10 @@ function Home() {
                 params={{ slug: p.slug }}
                 className="group block overflow-hidden rounded-2xl glass hover:shadow-glow transition"
               >
-                <div className={`aspect-[4/3] bg-gradient-to-br ${p.gradient} p-8 relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_60%)]" />
+                <div className="aspect-[4/3] relative overflow-hidden">
+                  <ProjectCover project={p} className="absolute inset-0" />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                  <div className="relative flex h-full flex-col justify-between text-white">
+                  <div className="relative flex h-full flex-col justify-between text-white p-8">
                     <span className="text-xs uppercase tracking-widest opacity-80">{p.category}</span>
                     <h3 className="text-2xl font-semibold leading-tight">{p.title}</h3>
                   </div>

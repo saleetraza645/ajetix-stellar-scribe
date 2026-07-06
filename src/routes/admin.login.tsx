@@ -20,7 +20,7 @@ function AdminLogin() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!API_ENABLED) {
-      setError("Admin API not configured. See server/README.md.");
+      setError("Admin API not configured. Deploy server/ to Render/Railway, then set VITE_API_BASE_URL on Lovable to your live API URL (not localhost).");
       return;
     }
     setError(null);
@@ -30,7 +30,12 @@ function AdminLogin() {
       authToken.set(res.token);
       navigate({ to: "/admin" });
     } catch (e) {
-      const msg = e instanceof ApiError ? e.message : "Login failed";
+      let msg = e instanceof ApiError ? e.message : "Login failed";
+      if (e instanceof ApiError && e.status === 0) {
+        msg = "Cannot reach the admin API. Deploy the server/ folder and set VITE_API_BASE_URL to your live API URL (e.g. https://api.ajetix.com).";
+      } else if (e instanceof ApiError && e.status === 401) {
+        msg = "Invalid email or password.";
+      }
       setError(msg);
     } finally {
       setLoading(false);
