@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/submissions")({
-  component: AdminSubmissions;
+  component: AdminSubmissions,
 });
 
 function AdminSubmissions() {
