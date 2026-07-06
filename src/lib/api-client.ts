@@ -61,6 +61,24 @@ export const api = {
   incrementView: (slug: string) =>
     request<{ ok: true }>(`/api/projects/${slug}/view`, { method: "POST" }),
 
+  // admin projects
+  adminListProjects: () =>
+    request<{ projects: ApiProject[] }>("/api/projects/admin/all", {}, true),
+  adminGetProject: (id: string) =>
+    request<{ project: ApiProject }>(`/api/projects/admin/by-id/${id}`, {}, true),
+  createProject: (data: Partial<ApiProject>) =>
+    request<{ project: ApiProject }>("/api/projects", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }, true),
+  updateProject: (id: string, data: Partial<ApiProject>) =>
+    request<{ project: ApiProject }>(`/api/projects/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }, true),
+  deleteProject: (id: string) =>
+    request<{ ok: true }>(`/api/projects/${id}`, { method: "DELETE" }, true),
+
   // admin submissions
   listSubmissions: (status?: string) =>
     request<{ submissions: ContactSubmission[] }>(
