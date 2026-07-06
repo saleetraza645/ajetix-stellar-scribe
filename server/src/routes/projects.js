@@ -30,6 +30,18 @@ router.get("/", async (_req, res) => {
   res.json({ projects: list });
 });
 
+// Admin — list ALL (including unpublished). Must be declared before /:slug.
+router.get("/admin/all", requireAuth, async (_req, res) => {
+  const list = await Project.find({}).sort({ order: 1, createdAt: -1 }).lean();
+  res.json({ projects: list });
+});
+
+router.get("/admin/by-id/:id", requireAuth, async (req, res) => {
+  const project = await Project.findById(req.params.id).lean();
+  if (!project) return res.status(404).json({ error: "Not found" });
+  res.json({ project });
+});
+
 router.get("/:slug", async (req, res) => {
   const project = await Project.findOne({ slug: req.params.slug, published: true }).lean();
   if (!project) return res.status(404).json({ error: "Not found" });
