@@ -1,0 +1,33 @@
+# Ajetix — AI summary for crawlers and AI search
+
+> Ajetix is an international AI, software, and product studio. We design and ship
+> SaaS platforms, mobile apps, AI/ML systems, cloud infrastructure, and brand
+> experiences for clients in the US, UK, EU, Canada, Australia, and the Middle East.
+
+## What we do
+
+- Custom AI & machine learning (LLMs, computer vision, voice, RAG assistants)
+- SaaS and enterprise software development
+- Mobile apps (React Native, Flutter)
+- Cloud & DevOps (Kubernetes, Terraform, CI/CD)
+- UI/UX design systems and WebGL marketing sites
+
+## Key pages
+
+- Home: https://ajetix.com/
+- Services: https://ajetix.com/services
+- Portfolio: https://ajetix.com/portfolio
+- Process: https://ajetix.com/process
+- About: https://ajetix.com/about
+- Contact: https://ajetix.com/contact
+
+## Contact
+
+- Email: info@ajetix.com
+- Website: https://ajetix.com
+
+## AI-assisted development
+
+Ajetix builds production software using modern AI-assisted engineering workflows —
+combining human product judgment with tools like LLM copilots, automated testing,
+and CI/CD pipelines to ship faster without sacrificing quality.
