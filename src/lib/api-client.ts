@@ -66,7 +66,7 @@ export const api = {
     request<{ projects: ApiProject[] }>("/api/projects/admin/all", {}, true),
   adminGetProject: (id: string) =>
     request<{ project: ApiProject }>(`/api/projects/admin/by-id/${id}`, {}, true),
-  createProject: (data: Partial<ApiProject>) =>
+  createProject: (data: Partial<ApiProjectAdmin>) =>
     request<{ project: ApiProject }>("/api/projects", {
       method: "POST",
       body: JSON.stringify(data),
