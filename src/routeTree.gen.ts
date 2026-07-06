@@ -24,6 +24,7 @@ import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminProjectsNewRouteImport } from './routes/admin.projects.new'
+import { Route as AdminProjectsIdEditRouteImport } from './routes/admin.projects.$id.edit'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -100,6 +101,11 @@ const AdminProjectsNewRoute = AdminProjectsNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AdminProjectsRoute,
 } as any)
+const AdminProjectsIdEditRoute = AdminProjectsIdEditRouteImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => AdminProjectsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/projects/new': typeof AdminProjectsNewRoute
+  '/admin/projects/$id/edit': typeof AdminProjectsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/admin': typeof AdminIndexRoute
   '/admin/projects/new': typeof AdminProjectsNewRoute
+  '/admin/projects/$id/edit': typeof AdminProjectsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/projects/new': typeof AdminProjectsNewRoute
+  '/admin/projects/$id/edit': typeof AdminProjectsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/portfolio/$slug'
     | '/admin/'
     | '/admin/projects/new'
+    | '/admin/projects/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/portfolio/$slug'
     | '/admin'
     | '/admin/projects/new'
+    | '/admin/projects/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/portfolio/$slug'
     | '/admin/'
     | '/admin/projects/new'
+    | '/admin/projects/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -324,15 +336,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProjectsNewRouteImport
       parentRoute: typeof AdminProjectsRoute
     }
+    '/admin/projects/$id/edit': {
+      id: '/admin/projects/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/admin/projects/$id/edit'
+      preLoaderRoute: typeof AdminProjectsIdEditRouteImport
+      parentRoute: typeof AdminProjectsRoute
+    }
   }
 }
 
 interface AdminProjectsRouteChildren {
   AdminProjectsNewRoute: typeof AdminProjectsNewRoute
+  AdminProjectsIdEditRoute: typeof AdminProjectsIdEditRoute
 }
 
 const AdminProjectsRouteChildren: AdminProjectsRouteChildren = {
   AdminProjectsNewRoute: AdminProjectsNewRoute,
+  AdminProjectsIdEditRoute: AdminProjectsIdEditRoute,
 }
 
 const AdminProjectsRouteWithChildren = AdminProjectsRoute._addFileChildren(
