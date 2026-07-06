@@ -79,7 +79,10 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "2.7.0",
+<<<<<<< HEAD
     "@playwright/test": "^1.61.1",
+=======
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
@@ -92,7 +95,10 @@
     "globals": "^15.15.0",
     "nitro": "3.0.260603-beta",
     "prettier": "^3.7.3",
+<<<<<<< HEAD
     "sharp": "^0.35.3",
+=======
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.0.16"

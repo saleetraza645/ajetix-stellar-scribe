@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import rateLimit from "express-rate-limit";
+<<<<<<< HEAD
 import multer from "multer";
 import { ContactSubmission } from "../models/ContactSubmission.js";
 import { requireAuth } from "../middleware/auth.js";
@@ -14,6 +15,13 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024, files: 5 },
 });
 
+=======
+import { ContactSubmission } from "../models/ContactSubmission.js";
+import { requireAuth } from "../middleware/auth.js";
+
+const router = Router();
+
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 const publicLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 4,
@@ -22,6 +30,7 @@ const publicLimiter = rateLimit({
   message: { error: "Too many submissions. Please slow down." },
 });
 
+<<<<<<< HEAD
 const fileEntrySchema = z.union([
   z.string(),
   z.object({
@@ -32,11 +41,14 @@ const fileEntrySchema = z.union([
   }),
 ]);
 
+=======
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 const contactSchema = z.object({
   name: z.string().trim().min(2).max(120),
   email: z.string().trim().email().max(255),
   budget: z.string().max(80).default(""),
   projectDetails: z.string().trim().min(20).max(5000),
+<<<<<<< HEAD
   fileUrls: z.array(fileEntrySchema).max(10).default([]),
   website: z.string().max(0).optional(), // honeypot
 });
@@ -98,6 +110,28 @@ router.post("/contact", publicLimiter, upload.array("files", 5), async (req, res
     console.error("[contact] submission failed:", err);
     res.status(500).json({ error: "Submission failed" });
   }
+=======
+  fileUrls: z.array(z.string().url()).max(10).default([]),
+  website: z.string().max(0).optional(), // honeypot
+});
+
+// Public — submit
+router.post("/contact", publicLimiter, async (req, res) => {
+  const parsed = contactSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid input" });
+  if (parsed.data.website) return res.status(200).json({ ok: true }); // silently drop bots
+
+  await ContactSubmission.create({
+    name: parsed.data.name,
+    email: parsed.data.email,
+    budget: parsed.data.budget,
+    projectDetails: parsed.data.projectDetails,
+    fileUrls: parsed.data.fileUrls,
+    ipAddress: req.ip,
+    userAgent: req.headers["user-agent"] || "",
+  });
+  res.status(201).json({ ok: true });
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 });
 
 // Admin
@@ -122,4 +156,8 @@ router.patch("/contact-submissions/:id", requireAuth, async (req, res) => {
   res.json({ submission: updated });
 });
 
+<<<<<<< HEAD
 export default router;
+=======
+export default router;
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2

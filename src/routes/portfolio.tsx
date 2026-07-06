@@ -3,10 +3,14 @@ import { useEffect, useRef } from "react";
 import { motion, LayoutGroup } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+<<<<<<< HEAD
 import { API_ENABLED } from "@/lib/api-client";
 import { usePortfolioProjects } from "@/lib/portfolio-queries";
 import type { Project } from "@/lib/portfolio-data";
 import { Skeleton } from "@/components/ui/skeleton";
+=======
+import { projects } from "@/lib/portfolio-data";
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 
 export const Route = createFileRoute("/portfolio")({
   head: () => ({
@@ -26,6 +30,7 @@ export const Route = createFileRoute("/portfolio")({
   component: Portfolio,
 });
 
+<<<<<<< HEAD
 function CoverImage({ project }: { project: Project }) {
   return (
     <>
@@ -49,11 +54,22 @@ function Portfolio() {
   const matches = useMatches();
   const isDetail = matches.some((m) => m.routeId === "/portfolio/$slug");
   const { data: projects = [], isLoading, isError, refetch } = usePortfolioProjects();
+=======
+function Portfolio() {
+  const matches = useMatches();
+  // If a child (detail) route is active, render only the outlet
+  const isDetail = matches.some((m) => m.routeId === "/portfolio/$slug");
+  if (isDetail) return <Outlet />;
+
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
   const trackRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+<<<<<<< HEAD
     if (isDetail) return;
+=======
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
     if (typeof window === "undefined") return;
     if (window.innerWidth < 768) return;
     const track = trackRef.current;
@@ -78,9 +94,13 @@ function Portfolio() {
     }, section);
 
     return () => ctx.revert();
+<<<<<<< HEAD
   }, [isDetail, projects]);
 
   if (isDetail) return <Outlet />;
+=======
+  }, []);
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 
   return (
     <LayoutGroup>
@@ -97,6 +117,7 @@ function Portfolio() {
         </motion.div>
       </div>
 
+<<<<<<< HEAD
       {API_ENABLED && isError && (
         <div className="mx-auto max-w-7xl px-6 pb-12 text-center">
           <p className="text-sm text-muted-foreground">Could not load projects from the API.</p>
@@ -192,3 +213,66 @@ function Portfolio() {
     </LayoutGroup>
   );
 }
+=======
+      {/* Horizontal scroll rail (desktop) */}
+      <section ref={sectionRef} className="hidden md:block relative overflow-hidden">
+        <div ref={trackRef} className="flex gap-6 pl-6 will-change-transform py-6">
+          {projects.map((p) => (
+            <Link
+              to="/portfolio/$slug"
+              params={{ slug: p.slug }}
+              key={p.slug}
+              className="group flex-none w-[420px] overflow-hidden rounded-2xl glass hover:shadow-glow transition"
+            >
+              <motion.div
+                layoutId={`project-cover-${p.slug}`}
+                className={`aspect-[4/3] bg-gradient-to-br ${p.gradient} p-8 relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500`}
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_60%)]" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                <div className="relative flex h-full flex-col justify-between text-white">
+                  <span className="text-xs uppercase tracking-widest opacity-80">{p.category}</span>
+                  <h3 className="text-3xl font-semibold leading-tight">{p.title}</h3>
+                </div>
+              </motion.div>
+              <div className="p-6">
+                <p className="text-sm text-muted-foreground">{p.tagline}</p>
+                <p className="mt-3 text-xs text-cyan">{p.outcome}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Mobile grid */}
+      <section className="md:hidden mx-auto max-w-7xl px-5 pb-24">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {projects.map((p) => (
+            <Link
+              to="/portfolio/$slug"
+              params={{ slug: p.slug }}
+              key={p.slug}
+              className="group overflow-hidden rounded-2xl glass"
+            >
+              <motion.div
+                layoutId={`project-cover-${p.slug}`}
+                className={`aspect-[4/3] bg-gradient-to-br ${p.gradient} p-6 relative overflow-hidden`}
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_60%)]" />
+                <div className="relative flex h-full flex-col justify-between text-white">
+                  <span className="text-xs uppercase tracking-widest opacity-80">{p.category}</span>
+                  <h3 className="text-xl font-semibold">{p.title}</h3>
+                </div>
+              </motion.div>
+              <div className="p-4">
+                <p className="text-sm text-muted-foreground">{p.tagline}</p>
+                <p className="mt-2 text-xs text-cyan">{p.outcome}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </LayoutGroup>
+  );
+}
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2

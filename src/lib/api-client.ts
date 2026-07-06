@@ -79,6 +79,7 @@ export const api = {
   deleteProject: (id: string) =>
     request<{ ok: true }>(`/api/projects/${id}`, { method: "DELETE" }, true),
 
+<<<<<<< HEAD
   /** Public contact form — multipart when files attached */
   submitContact: async (data: {
     name: string;
@@ -112,6 +113,8 @@ export const api = {
     return payload as { ok: true };
   },
 
+=======
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
   // admin submissions
   listSubmissions: (status?: string) =>
     request<{ submissions: ContactSubmission[] }>(

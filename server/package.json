@@ -9,12 +9,18 @@
     "dev": "node --watch src/index.js",
     "seed": "node src/seed.js"
   },
+<<<<<<< HEAD
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
+=======
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
@@ -23,7 +29,14 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.0",
     "multer": "^1.4.5-lts.1",
+<<<<<<< HEAD
     "nodemailer": "^9.0.3",
     "zod": "^3.23.8"
   }
 }
+=======
+    "cloudinary": "^2.5.1",
+    "zod": "^3.23.8"
+  }
+}
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2

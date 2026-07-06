@@ -3,8 +3,14 @@ import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion } from "framer-motion";
 import { z } from "zod";
+<<<<<<< HEAD
 import { Upload, X, Mail, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { api, API_ENABLED, ApiError } from "@/lib/api-client";
+=======
+import imageCompression from "browser-image-compression";
+import { Upload, X, Mail, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -90,6 +96,7 @@ function Contact() {
     setErrors({});
     setStatus("submitting");
 
+<<<<<<< HEAD
     if (!API_ENABLED) {
       setStatus("error");
       setErrorMsg("Contact API is not configured. Set VITE_API_BASE_URL in your environment.");
@@ -108,12 +115,58 @@ function Contact() {
         files,
       });
 
+=======
+    try {
+      // Upload files with client-side image compression
+      const fileUrls: { name: string; path: string; size: number }[] = [];
+      const submissionId = crypto.randomUUID();
+
+      for (const file of files) {
+        let toUpload: File = file;
+        if (file.type.startsWith("image/")) {
+          try {
+            toUpload = await imageCompression(file, {
+              maxSizeMB: 1.5,
+              maxWidthOrHeight: 2400,
+              useWebWorker: true,
+            });
+          } catch { /* fallback to original */ }
+        }
+        const path = `submissions/${submissionId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
+        const { error: upErr } = await supabase.storage
+          .from("contact-attachments")
+          .upload(path, toUpload, { contentType: file.type, upsert: false });
+        if (upErr) throw upErr;
+        fileUrls.push({ name: file.name, path, size: toUpload.size });
+      }
+
+      // POST to server route (handles rate limit, DB insert, email)
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name, email, budget,
+          customBudget: budget === "Custom" ? customBudget : undefined,
+          projectDetails, fileUrls, website,
+        }),
+      });
+
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t || "Submission failed");
+      }
+
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
       setStatus("success");
       setName(""); setEmail(""); setProjectDetails(""); setFiles([]); setCustomBudget("");
     } catch (err) {
       console.error(err);
       setStatus("error");
+<<<<<<< HEAD
       setErrorMsg(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
+=======
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
+>>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
     }
   }
 
