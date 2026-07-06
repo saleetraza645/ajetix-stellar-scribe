@@ -83,7 +83,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-<<<<<<< HEAD
   head: () => {
     const siteUrl = (import.meta.env.VITE_SITE_URL || "https://ajetix.com").replace(/\/$/, "");
     const description =
@@ -154,64 +153,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
     };
   },
-=======
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ajetix — AI, Software & Product Studio" },
-      {
-        name: "description",
-        content:
-          "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East.",
-      },
-      { name: "author", content: "Ajetix" },
-      { name: "theme-color", content: "#0B1120" },
-      { property: "og:site_name", content: "Ajetix" },
-      { property: "og:title", content: "Ajetix — AI, Software & Product Studio" },
-      {
-        property: "og:description",
-        content: "AI, software, SaaS, mobile, cloud and design — built by a global team.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Ajetix_1126" },
-      { name: "twitter:title", content: "Ajetix — AI, Software & Product Studio" },
-      { name: "description", content: "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East." },
-      { property: "og:description", content: "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East." },
-      { name: "twitter:description", content: "Ajetix is an international AI, software, and product studio building ambitious digital products for teams in the US, UK, EU, Canada, Australia, and the Middle East." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/86b4ea90-510d-499a-a4ff-5bc42c76ecf5/id-preview-f0aee6b4--c08df396-a80d-4e41-ae6d-5cb5aa462bab.lovable.app-1783273373365.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/86b4ea90-510d-499a-a4ff-5bc42c76ecf5/id-preview-f0aee6b4--c08df396-a80d-4e41-ae6d-5cb5aa462bab.lovable.app-1783273373365.png" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
-      { rel: "apple-touch-icon", href: "/favicon.png" },
-    ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Ajetix",
-          url: "https://ajetix.com",
-          logo: "https://ajetix.com/favicon.png",
-          email: "info@ajetix.com",
-          sameAs: [
-            "https://www.instagram.com/ajetix_as/",
-            "https://www.facebook.com/share/1DAJEzWjpH/",
-            "https://youtube.com/@ajetix",
-            "https://x.com/Ajetix_1126",
-          ],
-        }),
-      },
-    ],
-  }),
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

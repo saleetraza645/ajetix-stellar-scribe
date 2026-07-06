@@ -85,7 +85,6 @@ npm run dev      # http://localhost:4000
 Same shape — Node 20, `npm install`, `npm start`, env vars from
 `.env.example`. Both support health checks; use `GET /health`.
 
-<<<<<<< HEAD
 ## Email Setup
 
 Contact form submissions are stored in MongoDB and a notification email is
@@ -129,8 +128,6 @@ tier available):
 Uploaded images are stored under the `ajetix/projects` folder in Cloudinary
 and the returned `secure_url` is saved on the project document.
 
-=======
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 ## Security
 
 - Passwords hashed with bcrypt (10 rounds)

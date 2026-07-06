@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { z } from "zod";
-<<<<<<< HEAD
 import multer from "multer";
 import { Project } from "../models/Project.js";
 import { requireAuth } from "../middleware/auth.js";
@@ -17,13 +16,6 @@ const upload = multer({
   },
 });
 
-=======
-import { Project } from "../models/Project.js";
-import { requireAuth } from "../middleware/auth.js";
-
-const router = Router();
-
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 const projectSchema = z.object({
   slug: z.string().min(1).max(120).regex(/^[a-z0-9-]+$/, "kebab-case slug"),
   title: z.string().min(1).max(200),
@@ -99,7 +91,6 @@ router.delete("/:id", requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-<<<<<<< HEAD
 router.post("/:id/images", requireAuth, upload.single("image"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No image file provided" });
 
@@ -118,6 +109,4 @@ router.post("/:id/images", requireAuth, upload.single("image"), async (req, res)
   }
 });
 
-=======
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 export default router;

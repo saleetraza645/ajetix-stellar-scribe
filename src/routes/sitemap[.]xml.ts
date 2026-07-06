@@ -2,11 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { projects } from "@/lib/portfolio-data";
 
-<<<<<<< HEAD
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://ajetix.com").replace(/\/$/, "");
-=======
-const BASE_URL = ""; // relative — resolves to whichever domain serves it
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 
 interface SitemapEntry {
   path: string;
@@ -35,12 +31,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         const urls = entries.map((e) =>
           [
             `  <url>`,
-<<<<<<< HEAD
             `    <loc>${SITE_URL}${e.path}</loc>`,
             `    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>`,
-=======
-            `    <loc>${BASE_URL}${e.path}</loc>`,
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,

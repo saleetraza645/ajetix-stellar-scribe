@@ -1,7 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-<<<<<<< HEAD
 import { API_ENABLED } from "@/lib/api-client";
 import { fetchProject, usePortfolioProject, usePortfolioProjects } from "@/lib/portfolio-queries";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,13 +8,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/portfolio/$slug")({
   loader: async ({ params }) => {
     const project = await fetchProject(params.slug);
-=======
-import { getProject, projects } from "@/lib/portfolio-data";
-
-export const Route = createFileRoute("/portfolio/$slug")({
-  loader: ({ params }) => {
-    const project = getProject(params.slug);
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
     if (!project) throw notFound();
     return { project };
   },
@@ -40,7 +32,6 @@ export const Route = createFileRoute("/portfolio/$slug")({
 });
 
 function ProjectDetail() {
-<<<<<<< HEAD
   const { slug } = Route.useParams();
   const loaderData = Route.useLoaderData();
   const { data: project = loaderData.project, isLoading, isError, refetch } = usePortfolioProject(slug);
@@ -77,12 +68,6 @@ function ProjectDetail() {
   const safeIdx = idx >= 0 ? idx : 0;
   const next = list[(safeIdx + 1) % list.length];
   const prev = list[(safeIdx - 1 + list.length) % list.length];
-=======
-  const { project } = Route.useLoaderData();
-  const idx = projects.findIndex((p) => p.slug === project.slug);
-  const next = projects[(idx + 1) % projects.length];
-  const prev = projects[(idx - 1 + projects.length) % projects.length];
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
 
   return (
     <article className="mx-auto max-w-5xl px-5 sm:px-6 py-16 sm:py-20">
@@ -105,7 +90,6 @@ function ProjectDetail() {
 
       <motion.div
         layoutId={`project-cover-${project.slug}`}
-<<<<<<< HEAD
         className="mt-12 aspect-[16/9] rounded-3xl shadow-glow-violet relative overflow-hidden"
       >
         {project.coverImage && (
@@ -118,10 +102,6 @@ function ProjectDetail() {
           />
         )}
         <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient}${project.coverImage ? " opacity-75" : ""}`} />
-=======
-        className={`mt-12 aspect-[16/9] rounded-3xl bg-gradient-to-br ${project.gradient} shadow-glow-violet relative overflow-hidden`}
-      >
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_60%)]" />
       </motion.div>
 
@@ -182,8 +162,4 @@ function ProjectDetail() {
       </nav>
     </article>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> a25318459c6d5f0d463fa1ed2c0fa7553a6d1ef2
