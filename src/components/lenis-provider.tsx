@@ -13,15 +13,10 @@ export function LenisProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Respect reduced motion — fall back to native scroll
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
-      // Native browser scroll restoration handles back/forward correctly here.
-      return;
-    }
+    if (prefersReduced) return;
 
-    // Take manual control of scroll restoration so Lenis doesn't fight the
-    // browser on back/forward and we can restore per-history-entry.
+    // Take manual control so Lenis and the browser don't fight on back/forward.
     const prevRestoration = history.scrollRestoration;
     history.scrollRestoration = "manual";
 
@@ -39,37 +34,37 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     });
     gsap.ticker.lagSmoothing(0);
 
-    // Save current scroll position keyed by history entry before leaving.
+    // Save scroll per history entry; restore on popstate, top on new nav.
     const scrollStore = new Map<string, number>();
-    const currentKey = () => `${history.state?.key ?? "root"}:${location.pathname}`;
+    const currentKey = () => location.pathname + location.search;
+    let poppedNext = false;
 
-    const saveScroll = () => scrollStore.set(currentKey(), window.scrollY);
-    window.addEventListener("beforeunload", saveScroll);
+    const saveCurrent = () => scrollStore.set(currentKey(), window.scrollY);
+    const onPop = () => { poppedNext = true; };
+    window.addEventListener("popstate", onPop);
+    window.addEventListener("beforeunload", saveCurrent);
 
-    // On any route resolution, if the navigation was a popstate (back/forward),
-    // restore the saved scroll position; otherwise jump to top instantly.
+    let lastKey = currentKey();
     const unsub = router.subscribe("onResolved", () => {
-      const isPop = router.history.location.state?.__TSR_isPop__ === true;
-      // Fallback detection: use performance nav type on first mount
-      const requestAnimationFrame_ = window.requestAnimationFrame;
-      requestAnimationFrame_(() => {
-        const key = currentKey();
-        const saved = scrollStore.get(key);
-        if (isPop && typeof saved === "number") {
-          lenis.scrollTo(saved, { immediate: true, force: true });
+      const newKey = currentKey();
+      // save scroll for the page we're leaving
+      if (newKey !== lastKey) scrollStore.set(lastKey, window.scrollY);
+      requestAnimationFrame(() => {
+        if (poppedNext) {
+          const saved = scrollStore.get(newKey);
+          lenis.scrollTo(typeof saved === "number" ? saved : 0, { immediate: true, force: true });
+          poppedNext = false;
         } else {
           lenis.scrollTo(0, { immediate: true, force: true });
         }
+        lastKey = newKey;
       });
     });
 
-    const onBeforeNav = () => saveScroll();
-    const unsubBefore = router.subscribe("onBeforeNavigate", onBeforeNav);
-
     return () => {
-      window.removeEventListener("beforeunload", saveScroll);
+      window.removeEventListener("popstate", onPop);
+      window.removeEventListener("beforeunload", saveCurrent);
       unsub();
-      unsubBefore();
       history.scrollRestoration = prevRestoration;
       lenis.destroy();
     };
