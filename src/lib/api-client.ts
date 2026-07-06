@@ -117,8 +117,13 @@ export type ApiProject = {
   timeline: string;
   views: number;
 };
-// Extra admin fields
-export type ApiProjectAdmin = ApiProject & { published: boolean; order: number };
+
+export type ApiProjectAdmin = ApiProject & {
+  published: boolean;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
 
 export type ContactSubmission = {
   _id: string;
