@@ -2,9 +2,8 @@ import { useRef, useMemo, Suspense, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-function ParticleField({ mouse }: { mouse: React.MutableRefObject<{ x: number; y: number }> }) {
+function ParticleField({ mouse, count }: { mouse: React.MutableRefObject<{ x: number; y: number }>; count: number }) {
   const ref = useRef<THREE.Points>(null);
-  const count = useMemo(() => (typeof window !== "undefined" && window.innerWidth < 768 ? 1200 : 3200), []);
 
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
@@ -46,7 +45,7 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<{ x: number; y
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.025}
+        size={0.028}
         vertexColors
         sizeAttenuation
         transparent
@@ -58,7 +57,7 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<{ x: number; y
   );
 }
 
-function CoreOrb() {
+function CoreOrb({ detail }: { detail: number }) {
   const ref = useRef<THREE.Mesh>(null);
   useFrame(({ clock }) => {
     if (!ref.current) return;
@@ -68,7 +67,7 @@ function CoreOrb() {
   });
   return (
     <mesh ref={ref}>
-      <icosahedronGeometry args={[1, 1]} />
+      <icosahedronGeometry args={[1, detail]} />
       <meshBasicMaterial color="#8B5CF6" wireframe transparent opacity={0.35} />
     </mesh>
   );
@@ -77,10 +76,12 @@ function CoreOrb() {
 export function Hero3D() {
   const mouse = useRef({ x: 0, y: 0 });
   const [enabled, setEnabled] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) setEnabled(false);
+    setIsMobile(window.innerWidth < 768);
     const onMove = (e: MouseEvent) => {
       mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
       mouse.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -91,17 +92,23 @@ export function Hero3D() {
 
   if (!enabled) return null;
 
+  // Mobile: fewer particles, lower geometry detail, capped DPR for battery + smooth 60fps
+  const particleCount = isMobile ? 500 : 3200;
+  const orbDetail = isMobile ? 0 : 1;
+  const dpr: [number, number] = isMobile ? [1, 1.25] : [1, 1.5];
+
   return (
     <div className="pointer-events-none absolute inset-0 -z-10">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 60 }}
-        dpr={[1, 1.5]}
+        dpr={dpr}
         gl={{ antialias: true, alpha: true }}
+        performance={{ min: 0.5 }}
       >
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
-          <CoreOrb />
-          <ParticleField mouse={mouse} />
+          <CoreOrb detail={orbDetail} />
+          <ParticleField mouse={mouse} count={particleCount} />
         </Suspense>
       </Canvas>
     </div>

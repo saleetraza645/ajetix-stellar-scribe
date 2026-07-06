@@ -33,11 +33,12 @@ function ProjectDetail() {
   const { project } = Route.useLoaderData();
   const idx = projects.findIndex((p) => p.slug === project.slug);
   const next = projects[(idx + 1) % projects.length];
+  const prev = projects[(idx - 1 + projects.length) % projects.length];
 
   return (
-    <article className="mx-auto max-w-5xl px-6 py-20">
+    <article className="mx-auto max-w-5xl px-5 sm:px-6 py-16 sm:py-20">
       <Link to="/portfolio" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft size={16} /> All projects
+        <ArrowLeft size={16} /> Back to Portfolio
       </Link>
 
       <motion.div
@@ -47,17 +48,20 @@ function ProjectDetail() {
         className="mt-8"
       >
         <span className="text-xs uppercase tracking-widest text-cyan">{project.category}</span>
-        <h1 className="mt-4 text-5xl md:text-7xl font-semibold leading-[1.05]">
+        <h1 className="mt-4 text-4xl sm:text-5xl md:text-7xl font-semibold leading-[1.05]">
           {project.title}
         </h1>
-        <p className="mt-6 text-xl text-muted-foreground max-w-3xl">{project.tagline}</p>
+        <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-3xl">{project.tagline}</p>
       </motion.div>
 
-      <div className={`mt-12 aspect-[16/9] rounded-3xl bg-gradient-to-br ${project.gradient} shadow-glow-violet relative overflow-hidden`}>
+      <motion.div
+        layoutId={`project-cover-${project.slug}`}
+        className={`mt-12 aspect-[16/9] rounded-3xl bg-gradient-to-br ${project.gradient} shadow-glow-violet relative overflow-hidden`}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_60%)]" />
-      </div>
+      </motion.div>
 
-      <div className="mt-16 grid md:grid-cols-3 gap-10">
+      <div className="mt-12 sm:mt-16 grid md:grid-cols-3 gap-8 md:gap-10">
         <div className="md:col-span-2">
           <h2 className="text-2xl font-semibold">Overview</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">{project.description}</p>
@@ -88,19 +92,30 @@ function ProjectDetail() {
         </aside>
       </div>
 
-      <div className="mt-24 border-t border-border/50 pt-8">
+      <nav className="mt-24 grid gap-4 sm:grid-cols-2 border-t border-border/50 pt-8">
+        <Link
+          to="/portfolio/$slug"
+          params={{ slug: prev.slug }}
+          className="flex items-center justify-between glass rounded-2xl p-5 sm:p-6 hover:bg-white/[0.06] transition group"
+        >
+          <ArrowLeft className="text-primary group-hover:-translate-x-1 transition shrink-0" />
+          <div className="text-right min-w-0 ml-3">
+            <div className="text-xs text-muted-foreground">Previous</div>
+            <div className="mt-1 text-lg font-semibold truncate">{prev.title}</div>
+          </div>
+        </Link>
         <Link
           to="/portfolio/$slug"
           params={{ slug: next.slug }}
-          className="flex items-center justify-between glass rounded-2xl p-6 hover:bg-white/[0.06] transition group"
+          className="flex items-center justify-between glass rounded-2xl p-5 sm:p-6 hover:bg-white/[0.06] transition group"
         >
-          <div>
-            <div className="text-xs text-muted-foreground">Next project</div>
-            <div className="mt-1 text-2xl font-semibold">{next.title}</div>
+          <div className="min-w-0 mr-3">
+            <div className="text-xs text-muted-foreground">Next</div>
+            <div className="mt-1 text-lg font-semibold truncate">{next.title}</div>
           </div>
-          <ArrowRight className="text-primary group-hover:translate-x-1 transition" />
+          <ArrowRight className="text-primary group-hover:translate-x-1 transition shrink-0" />
         </Link>
-      </div>
+      </nav>
     </article>
   );
 }
