@@ -71,7 +71,7 @@ export const api = {
       method: "POST",
       body: JSON.stringify(data),
     }, true),
-  updateProject: (id: string, data: Partial<ApiProject>) =>
+  updateProject: (id: string, data: Partial<ApiProjectAdmin>) =>
     request<{ project: ApiProject }>(`/api/projects/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
